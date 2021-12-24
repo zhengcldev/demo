@@ -1,0 +1,21 @@
+#端口，项目上下文根
+server:
+  port: 8864
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: '@Zcl123456'
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+mybatis:
+  mapper-locations: classpath:mapper/UserDao.xml
