@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-12-22 13:29:48
  */
-public class User implements Serializable {
+public class UserEntity implements Serializable {
     private static final long serialVersionUID = 236567286624691246L;
     /**
      * 用户表自增id

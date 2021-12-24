@@ -1,6 +1,6 @@
 package com.algorithm.demo.service.impl;
 
-import com.algorithm.demo.entity.User;
+import com.algorithm.demo.entity.UserEntity;
 import com.algorithm.demo.dao.UserDao;
 import com.algorithm.demo.service.UserService;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
      * @return 实例对象
      */
     @Override
-    public User queryById(Integer id) {
+    public UserEntity queryById(Integer id) {
         return this.userDao.queryById(id);
     }
 
@@ -41,38 +41,38 @@ public class UserServiceImpl implements UserService {
     /**
      * 分页查询
      *
-     * @param user 筛选条件
+     * @param userEntity 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
     @Override
-    public Page<User> queryByPage(User user, PageRequest pageRequest) {
-        long total = this.userDao.count(user);
-        return new PageImpl<>(this.userDao.queryAllByLimit(user, pageRequest), pageRequest, total);
+    public Page<UserEntity> queryByPage(UserEntity userEntity, PageRequest pageRequest) {
+        long total = this.userDao.count(userEntity);
+        return new PageImpl<>(this.userDao.queryAllByLimit(userEntity, pageRequest), pageRequest, total);
     }
 
     /**
      * 新增数据
      *
-     * @param user 实例对象
+     * @param userEntity 实例对象
      * @return 实例对象
      */
     @Override
-    public User insert(User user) {
-        this.userDao.insert(user);
-        return user;
+    public UserEntity insert(UserEntity userEntity) {
+        this.userDao.insert(userEntity);
+        return userEntity;
     }
 
     /**
      * 修改数据
      *
-     * @param user 实例对象
+     * @param userEntity 实例对象
      * @return 实例对象
      */
     @Override
-    public User update(User user) {
-        this.userDao.update(user);
-        return this.queryById(user.getId());
+    public UserEntity update(UserEntity userEntity) {
+        this.userDao.update(userEntity);
+        return this.queryById(userEntity.getId());
     }
 
     /**

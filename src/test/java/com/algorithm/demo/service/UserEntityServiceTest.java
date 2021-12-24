@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class UserServiceTest {
+class UserEntityServiceTest {
     @Autowired
     private UserDao userDao;
     @Test

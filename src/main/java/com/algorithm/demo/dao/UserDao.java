@@ -1,10 +1,8 @@
 package com.algorithm.demo.dao;
 
-import com.algorithm.demo.entity.User;
-import org.apache.ibatis.annotations.Mapper;
+import com.algorithm.demo.entity.UserEntity;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public interface UserDao {
      * @param id 主键
      * @return 实例对象
      */
-    User queryById(Integer id);
+    UserEntity queryById(Integer id);
 
     /**
      * 查询用户
@@ -35,27 +33,27 @@ public interface UserDao {
     /**
      * 查询指定行数据
      *
-     * @param user 查询条件
+     * @param userEntity 查询条件
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<User> queryAllByLimit(User user, @Param("pageable") Pageable pageable);
+    List<UserEntity> queryAllByLimit(UserEntity userEntity, @Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
      *
-     * @param user 查询条件
+     * @param userEntity 查询条件
      * @return 总行数
      */
-    long count(User user);
+    long count(UserEntity userEntity);
 
     /**
      * 新增数据
      *
-     * @param user 实例对象
+     * @param userEntity 实例对象
      * @return 影响行数
      */
-    int insert(User user);
+    int insert(UserEntity userEntity);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
@@ -63,7 +61,7 @@ public interface UserDao {
      * @param entities List<User> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<User> entities);
+    int insertBatch(@Param("entities") List<UserEntity> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
@@ -72,15 +70,15 @@ public interface UserDao {
      * @return 影响行数
      * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
      */
-    int insertOrUpdateBatch(@Param("entities") List<User> entities);
+    int insertOrUpdateBatch(@Param("entities") List<UserEntity> entities);
 
     /**
      * 修改数据
      *
-     * @param user 实例对象
+     * @param userEntity 实例对象
      * @return 影响行数
      */
-    int update(User user);
+    int update(UserEntity userEntity);
 
     /**
      * 通过主键删除数据

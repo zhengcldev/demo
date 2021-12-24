@@ -1,13 +1,12 @@
 package com.algorithm.demo.Controller;
 
-import com.algorithm.demo.entity.User;
+import com.algorithm.demo.entity.UserEntity;
 import com.algorithm.demo.enumeration.StatusEnum;
 import com.algorithm.demo.resp.Resp;
 import com.algorithm.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * @描述:
@@ -22,8 +21,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping(value = "/login")
-    public Resp<Object> login(@RequestBody User user) {
-        Boolean isLogin = userService.queryUser(user.getUserId(), user.getPassword());
+    public Resp<Object> login(@RequestBody UserEntity userEntity) {
+        Boolean isLogin = userService.queryUser(userEntity.getUserId(), userEntity.getPassword());
         Resp<Object> rsp = new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), isLogin);
         return rsp;
     }
