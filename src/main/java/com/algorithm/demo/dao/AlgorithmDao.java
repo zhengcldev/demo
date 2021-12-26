@@ -1,18 +1,17 @@
 package com.algorithm.demo.dao;
 
-import com.algorithm.demo.entity.User;
+import com.algorithm.demo.entity.Algorithm;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 
 /**
- * 算法演示系统用户表(User)表数据库访问层
+ * 轮廓模式挖掘算法表(Algorithm)表数据库访问层
  *
  * @author makejava
- * @since 2021-12-22 13:29:48
+ * @since 2021-12-25 21:51:19
  */
-public interface UserDao {
+public interface AlgorithmDao {
 
     /**
      * 通过ID查询单条数据
@@ -20,65 +19,59 @@ public interface UserDao {
      * @param id 主键
      * @return 实例对象
      */
-    User queryById(Integer id);
+    Algorithm queryById(Integer id);
 
-    /**
-     * 查询用户
-     * @param userId 用户ID
-     * @param password 用户密码
-     * @return 数据条数
-     */
-    int queryUserByUidAndPwd(String userId, String password);
+    List<Algorithm> queryAlgoBySource(Integer isSource);
 
     /**
      * 查询指定行数据
      *
-     * @param user 查询条件
+     * @param algorithm 查询条件
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<User> queryAllByLimit(User user, @Param("pageable") Pageable pageable);
+    List<Algorithm> queryAllByLimit(Algorithm algorithm, @Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
      *
-     * @param user 查询条件
+     * @param algorithm 查询条件
      * @return 总行数
      */
-    long count(User user);
+    long count(Algorithm algorithm);
 
     /**
      * 新增数据
      *
-     * @param user 实例对象
+     * @param algorithm 实例对象
      * @return 影响行数
      */
-    int insert(User user);
+    int insert(Algorithm algorithm);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
      *
-     * @param entities List<User> 实例对象列表
+     * @param entities List<Algorithm> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<User> entities);
+    int insertBatch(@Param("entities") List<Algorithm> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
      *
-     * @param entities List<User> 实例对象列表
+     * @param entities List<Algorithm> 实例对象列表
      * @return 影响行数
      * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
      */
-    int insertOrUpdateBatch(@Param("entities") List<User> entities);
+    int insertOrUpdateBatch(@Param("entities") List<Algorithm> entities);
 
     /**
      * 修改数据
      *
-     * @param user 实例对象
+     * @param algorithm 实例对象
      * @return 影响行数
      */
-    int update(User user);
+    int update(Algorithm algorithm);
 
     /**
      * 通过主键删除数据

@@ -1,16 +1,18 @@
 package com.algorithm.demo.service;
 
-import com.algorithm.demo.entity.User;
+import com.algorithm.demo.entity.Dataset;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 /**
- * 算法演示系统用户表(User)表服务接口
+ * 数据集表，数据集信息描述(Dataset)表服务接口
  *
  * @author makejava
- * @since 2021-12-22 13:30:11
+ * @since 2021-12-25 21:53:52
  */
-public interface UserService {
+public interface DatasetService {
 
     /**
      * 通过ID查询单条数据
@@ -18,41 +20,39 @@ public interface UserService {
      * @param id 主键
      * @return 实例对象
      */
-    User queryById(Integer id);
+    Dataset queryById(Integer id);
 
     /**
-     * 根据用户id和密码查询，用于登陆
+     * 查询全部数据
      *
-     * @param  userId 用户id
-     * @param  password 用户密码
-     * @return 返回bool值
+     * @return 实例对象
      */
-    Boolean queryUser(String userId, String password);
+    List<Dataset> queryDataset();
 
     /**
      * 分页查询
      *
-     * @param user 筛选条件
-     * @param pageRequest      分页对象
+     * @param dataset     筛选条件
+     * @param pageRequest 分页对象
      * @return 查询结果
      */
-    Page<User> queryByPage(User user, PageRequest pageRequest);
+    Page<Dataset> queryByPage(Dataset dataset, PageRequest pageRequest);
 
     /**
      * 新增数据
      *
-     * @param user 实例对象
+     * @param dataset 实例对象
      * @return 实例对象
      */
-    User insert(User user);
+    Dataset insert(Dataset dataset);
 
     /**
      * 修改数据
      *
-     * @param user 实例对象
+     * @param dataset 实例对象
      * @return 实例对象
      */
-    User update(User user);
+    Dataset update(Dataset dataset);
 
     /**
      * 通过主键删除数据

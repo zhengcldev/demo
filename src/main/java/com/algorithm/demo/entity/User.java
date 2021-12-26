@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-12-22 13:29:48
  */
-public class UserEntity implements Serializable {
+public class User implements Serializable {
     private static final long serialVersionUID = 236567286624691246L;
     /**
      * 用户表自增id
@@ -41,7 +41,7 @@ public class UserEntity implements Serializable {
     /**
      * 创建时间
      */
-    private Long createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -49,7 +49,7 @@ public class UserEntity implements Serializable {
     /**
      * 更新时间
      */
-    private Long updateTime;
+    private String updateTime;
 
 
     public Integer getId() {
@@ -108,11 +108,11 @@ public class UserEntity implements Serializable {
         this.creator = creator;
     }
 
-    public Long getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Long createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -124,11 +124,11 @@ public class UserEntity implements Serializable {
         this.updater = updater;
     }
 
-    public Long getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Long updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

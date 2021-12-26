@@ -1,6 +1,6 @@
-package com.algorithm.demo.Controller;
+package com.algorithm.demo.controller;
 
-import com.algorithm.demo.entity.UserEntity;
+import com.algorithm.demo.entity.User;
 import com.algorithm.demo.enumeration.StatusEnum;
 import com.algorithm.demo.resp.Resp;
 import com.algorithm.demo.service.UserService;
@@ -21,8 +21,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping(value = "/login")
-    public Resp<Object> login(@RequestBody UserEntity userEntity) {
-        Boolean isLogin = userService.queryUser(userEntity.getUserId(), userEntity.getPassword());
+    public Resp<Object> login(@RequestBody User user) {
+        Boolean isLogin = userService.queryUser(user.getUserId(), user.getPassword());
         Resp<Object> rsp = new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), isLogin);
         return rsp;
     }

@@ -18,4 +18,4 @@ spring:
       ddl-auto: update
     show-sql: true
 mybatis:
-  mapper-locations: classpath:mapper/UserDao.xml
+  mapper-locations: classpath:mapper/**/*.xml

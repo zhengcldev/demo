@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.algorithm.demo.dao.DatasetDao">
+
+    <resultMap type="com.algorithm.demo.entity.Dataset" id="DatasetMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="dataName" column="data_name" jdbcType="VARCHAR"/>
+        <result property="isReal" column="is_real" jdbcType="INTEGER"/>
+        <result property="addName" column="add_name" jdbcType="VARCHAR"/>
+        <result property="addTime" column="add_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DatasetMap">
+        select
+          id, data_name, is_real, add_name, add_time
+        from dataset
+        where id = #{id}
+    </select>
+
+    <!--查询所有数据集-->
+    <select id="queryAll" resultMap="DatasetMap">
+        select * from dataset
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DatasetMap">
+        select
+        id, data_name, is_real, add_name, add_time
+        from dataset
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="dataName != null and dataName != ''">
+                and data_name = #{dataName}
+            </if>
+            <if test="isReal != null">
+                and is_real = #{isReal}
+            </if>
+            <if test="addName != null and addName != ''">
+                and add_name = #{addName}
+            </if>
+            <if test="addTime != null">
+                and add_time = #{addTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from dataset
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="dataName != null and dataName != ''">
+                and data_name = #{dataName}
+            </if>
+            <if test="isReal != null">
+                and is_real = #{isReal}
+            </if>
+            <if test="addName != null and addName != ''">
+                and add_name = #{addName}
+            </if>
+            <if test="addTime != null">
+                and add_time = #{addTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into dataset(data_name, is_real, add_name, add_time)
+        values (#{dataName}, #{isReal}, #{addName}, #{addTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into dataset(data_name, is_real, add_name, add_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.dataName}, #{entity.isReal}, #{entity.addName}, #{entity.addTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into dataset(data_name, is_real, add_name, add_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.dataName}, #{entity.isReal}, #{entity.addName}, #{entity.addTime})
+        </foreach>
+        on duplicate key update
+        data_name = values(data_name),
+        is_real = values(is_real),
+        add_name = values(add_name),
+        add_time = values(add_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update dataset
+        <set>
+            <if test="dataName != null and dataName != ''">
+                data_name = #{dataName},
+            </if>
+            <if test="isReal != null">
+                is_real = #{isReal},
+            </if>
+            <if test="addName != null and addName != ''">
+                add_name = #{addName},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from dataset where id = #{id}
+    </delete>
+
+</mapper>
+
