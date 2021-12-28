@@ -32,7 +32,7 @@ public class AlgorithmController {
      *获取全部数据集信息
      */
     @GetMapping("/getAlgorithm")
-    public Resp<Object> getDataset(@RequestParam(name = "isSource")Integer isSource) {
+    public Resp<Object> getDataset(@RequestParam(name = "isSource",required = false,defaultValue = "0")Integer isSource) {
         List<Algorithm> algorithmList = algorithmService.queryAlgorithm(isSource);
         Resp<Object> rsp = new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), algorithmList);
         return rsp;
