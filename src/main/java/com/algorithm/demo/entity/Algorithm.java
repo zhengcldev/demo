@@ -1,15 +1,18 @@
 package com.algorithm.demo.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * 轮廓模式挖掘算法表(Algorithm)实体类
  *
  * @author makejava
- * @since 2021-12-26 13:19:10
+ * @since 2022-01-02 22:22:13
  */
+@Data
 public class Algorithm implements Serializable {
-    private static final long serialVersionUID = 949611231076856966L;
+    private static final long serialVersionUID = -40963164156215878L;
     /**
      * 算法表自增id
      */
@@ -38,6 +41,8 @@ public class Algorithm implements Serializable {
      * 是否是提出算法，0表示对比算法，1表示原算法
      */
     private Integer isSource;
+
+    private String algoUrl;
 
 
     public Integer getId() {
@@ -94,6 +99,14 @@ public class Algorithm implements Serializable {
 
     public void setIsSource(Integer isSource) {
         this.isSource = isSource;
+    }
+
+    public String getAlgoUrl() {
+        return algoUrl;
+    }
+
+    public void setAlgoUrl(String algoUrl) {
+        this.algoUrl = algoUrl;
     }
 
 }

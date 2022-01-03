@@ -34,15 +34,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean queryUser(String userId, String password) {
-        int res=userDao.queryUserByUidAndPwd(userId,password);
+        int res = userDao.queryUserByUidAndPwd(userId, password);
         return res != 0;
     }
 
     /**
      * 分页查询
      *
-     * @param user 筛选条件
-     * @param pageRequest      分页对象
+     * @param user        筛选条件
+     * @param pageRequest 分页对象
      * @return 查询结果
      */
     @Override
@@ -73,6 +73,12 @@ public class UserServiceImpl implements UserService {
     public User update(User user) {
         this.userDao.update(user);
         return this.queryById(user.getId());
+    }
+
+    @Override
+    public boolean updatePassword(String userId, String password, String newPassword) {
+        int result=userDao.updatePwdByUidAndPwd(userId, password, newPassword);
+        return result!=0;
     }
 
     /**

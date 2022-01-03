@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Data
 public class Resp<T> implements Serializable {
 
+    private static final long serialVersionUID = -6298879715490070081L;
     /**
      * 返回状态码
      */

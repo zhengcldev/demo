@@ -55,6 +55,15 @@ public interface UserService {
     User update(User user);
 
     /**
+     *
+     * @param userId 用户id
+     * @param password 原始密码
+     * @param newPassword 新密码
+     * @return 布尔值
+     */
+    boolean updatePassword(String userId, String password, String newPassword);
+
+    /**
      * 通过主键删除数据
      *
      * @param id 主键

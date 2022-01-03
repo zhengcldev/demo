@@ -21,7 +21,7 @@ public interface AlgorithmDao {
      */
     Algorithm queryById(Integer id);
 
-    List<Algorithm> queryAlgoBySource(Integer isSource);
+    List<Algorithm> queryAlgoBySource(Integer isSource,String algoName);
 
     /**
      * 查询指定行数据

@@ -498,14 +498,14 @@ public class AlgoSFUPMinerUemax {
 	/**
 	 * Print statistics about the latest execution to System.out.
 	 */
-	public AlgoResult getResult() {
+	public AlgoResult getAlgoResult() {
 		AlgoResult algoResult=new AlgoResult();
 		algoResult.setAlgoName("SFU-Miner");
 		algoResult.setSearchSpace(String.valueOf(searchCount));
 		algoResult.setSFUI(String.valueOf(sfupCount));
 		algoResult.setPSFUI(String.valueOf(psfupCount));
-		algoResult.setRunTime(String.valueOf(endTimestamp - startTimestamp));
-		algoResult.setRunMemory(String.valueOf(maxMemory));
+		algoResult.setRunTime(String.format("%.2f", (endTimestamp - startTimestamp)*0.001));
+		algoResult.setRunMemory(String.format("%.2f",maxMemory));
 		return algoResult;
 	}
 }

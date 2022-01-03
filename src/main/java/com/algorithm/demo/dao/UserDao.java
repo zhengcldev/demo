@@ -80,6 +80,7 @@ public interface UserDao {
      */
     int update(User user);
 
+    int updatePwdByUidAndPwd(String userId, String password, String newPassword);
     /**
      * 通过主键删除数据
      *

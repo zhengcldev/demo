@@ -7,6 +7,7 @@ import com.algorithm.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @描述:
@@ -23,11 +24,18 @@ public class UserController {
     @PostMapping(value = "/login")
     public Resp<Object> login(@RequestBody User user) {
         Boolean isLogin = userService.queryUser(user.getUserId(), user.getPassword());
-        Resp<Object> rsp = new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), isLogin);
-        return rsp;
+        return new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), isLogin);
     }
     @GetMapping(value = "/test")
     public String test(){
         return "test";
+    }
+    /**
+     * 修改用户密码
+     */
+    @PostMapping(value = "/updatePassword")
+    public Resp<Object> updatePassword(@RequestBody Map<String,String> userInfo){
+         boolean isSuccess=userService.updatePassword(userInfo.get("userId"),userInfo.get("password"),userInfo.get("newPassword"));
+        return new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), isSuccess);
     }
 }

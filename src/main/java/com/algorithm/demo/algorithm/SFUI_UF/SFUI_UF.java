@@ -624,8 +624,8 @@ public class SFUI_UF {
 	public AlgoResult getResult() {
 		AlgoResult algoResult=new AlgoResult();
 		algoResult.setAlgoName("SFUI_UF");
-		algoResult.setRunTime(String.valueOf(endTimestamp - startTimestamp));
-		algoResult.setRunMemory(String.valueOf(maxMemory));
+		algoResult.setRunTime(String.format("%.2f", (endTimestamp - startTimestamp)*0.001));
+		algoResult.setRunMemory(String.format("%.2f",maxMemory));
 		algoResult.setPSFUI(String.valueOf(psfupCount));
 		algoResult.setSFUI(String.valueOf(sfupCount));
 		algoResult.setSearchSpace(String.valueOf(searchCount));

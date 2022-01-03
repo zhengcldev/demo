@@ -1,15 +1,18 @@
 package com.algorithm.demo.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * 数据集表，数据集信息描述(Dataset)实体类
  *
  * @author makejava
- * @since 2021-12-25 21:53:52
+ * @since 2022-01-02 22:23:41
  */
+@Data
 public class Dataset implements Serializable {
-    private static final long serialVersionUID = -32782395211914417L;
+    private static final long serialVersionUID = 156622125148872883L;
     /**
      * 数据集表自增id
      */
@@ -30,6 +33,32 @@ public class Dataset implements Serializable {
      * 添加时间
      */
     private String addTime;
+    /**
+     * 是否是稀疏数据集
+     */
+    private Integer isSparse;
+    /**
+     * 数据集信息描述
+     */
+    private String description;
+    /**
+     * 数据集交易条数
+     */
+    private Integer transCount;
+    /**
+     * 数据集不同项个数
+     */
+    private Integer itemCount;
+    /**
+     * 数据集平均交易长度
+     */
+    private Integer avgTransLen;
+    /**
+     * 最大交易长度
+     */
+    private Integer maxTransLen;
+
+    private String dataUrl;
 
 
     public Integer getId() {
@@ -70,6 +99,62 @@ public class Dataset implements Serializable {
 
     public void setAddTime(String addTime) {
         this.addTime = addTime;
+    }
+
+    public Integer getIsSparse() {
+        return isSparse;
+    }
+
+    public void setIsSparse(Integer isSparse) {
+        this.isSparse = isSparse;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getTransCount() {
+        return transCount;
+    }
+
+    public void setTransCount(Integer transCount) {
+        this.transCount = transCount;
+    }
+
+    public Integer getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(Integer itemCount) {
+        this.itemCount = itemCount;
+    }
+
+    public Integer getAvgTransLen() {
+        return avgTransLen;
+    }
+
+    public void setAvgTransLen(Integer avgTransLen) {
+        this.avgTransLen = avgTransLen;
+    }
+
+    public Integer getMaxTransLen() {
+        return maxTransLen;
+    }
+
+    public void setMaxTransLen(Integer maxTransLen) {
+        this.maxTransLen = maxTransLen;
+    }
+
+    public String getDataUrl() {
+        return dataUrl;
+    }
+
+    public void setDataUrl(String dataUrl) {
+        this.dataUrl = dataUrl;
     }
 
 }

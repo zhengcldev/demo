@@ -34,8 +34,8 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     }
 
     @Override
-    public List<Algorithm> queryAlgorithm(Integer isSource) {
-        return algorithmDao.queryAlgoBySource(isSource);
+    public List<Algorithm> queryAlgorithm(Integer isSource, String algoName) {
+        return algorithmDao.queryAlgoBySource(isSource,algoName);
     }
 
     /**

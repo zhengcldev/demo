@@ -27,7 +27,7 @@ public interface AlgorithmService {
      *
      * @return 实例对象
      */
-    List<Algorithm> queryAlgorithm(Integer isSource);
+    List<Algorithm> queryAlgorithm(Integer isSource,String algoName);
 
     /**
      * 分页查询
