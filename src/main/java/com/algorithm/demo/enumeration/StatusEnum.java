@@ -7,7 +7,9 @@ package com.algorithm.demo.enumeration;
  */
 public enum StatusEnum {
     LOGIN_SUCCESS("200", "登陆成功"),
-    LOGIN_ERROR("401", "登陆失败");
+    LOGIN_ERROR("401", "登陆失败"),
+    ALGO_RUN_SUCCESS("202","算法运行成功"),
+    ALGO_RUN_FAIL("402","算法运行失败");
 
     /**
      * 返回状态码

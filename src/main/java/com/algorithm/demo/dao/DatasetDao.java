@@ -1,18 +1,25 @@
 package com.algorithm.demo.dao;
 
-import com.algorithm.demo.entity.User;
+import com.algorithm.demo.entity.Dataset;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 /**
- * 算法演示系统用户表(User)表数据库访问层
+ * 数据集表，数据集信息描述(Dataset)表数据库访问层
  *
  * @author makejava
- * @since 2021-12-22 13:29:48
+ * @since 2021-12-25 21:53:52
  */
-public interface UserDao {
+public interface DatasetDao {
+
+    /**
+     * 查询全部数据
+     *
+     * @return 实例对象
+     */
+    List<Dataset> queryAll();
 
     /**
      * 通过ID查询单条数据
@@ -20,67 +27,58 @@ public interface UserDao {
      * @param id 主键
      * @return 实例对象
      */
-    User queryById(Integer id);
-
-    /**
-     * 查询用户
-     * @param userId 用户ID
-     * @param password 用户密码
-     * @return 数据条数
-     */
-    int queryUserByUidAndPwd(String userId, String password);
+    Dataset queryById(Integer id);
 
     /**
      * 查询指定行数据
      *
-     * @param user 查询条件
-     * @param pageable         分页对象
+     * @param dataset  查询条件
+     * @param pageable 分页对象
      * @return 对象列表
      */
-    List<User> queryAllByLimit(User user, @Param("pageable") Pageable pageable);
+    List<Dataset> queryAllByLimit(Dataset dataset, @Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
      *
-     * @param user 查询条件
+     * @param dataset 查询条件
      * @return 总行数
      */
-    long count(User user);
+    long count(Dataset dataset);
 
     /**
      * 新增数据
      *
-     * @param user 实例对象
+     * @param dataset 实例对象
      * @return 影响行数
      */
-    int insert(User user);
+    int insert(Dataset dataset);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
      *
-     * @param entities List<User> 实例对象列表
+     * @param entities List<Dataset> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<User> entities);
+    int insertBatch(@Param("entities") List<Dataset> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
      *
-     * @param entities List<User> 实例对象列表
+     * @param entities List<Dataset> 实例对象列表
      * @return 影响行数
      * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
      */
-    int insertOrUpdateBatch(@Param("entities") List<User> entities);
+    int insertOrUpdateBatch(@Param("entities") List<Dataset> entities);
 
     /**
      * 修改数据
      *
-     * @param user 实例对象
+     * @param dataset 实例对象
      * @return 影响行数
      */
-    int update(User user);
+    int update(Dataset dataset);
 
-    int updatePwdByUidAndPwd(String userId, String password, String newPassword);
     /**
      * 通过主键删除数据
      *

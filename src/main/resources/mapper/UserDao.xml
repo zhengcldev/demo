@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.algorithm.demo.dao.UserDao">
 
-    <resultMap type="com.algorithm.demo.entity.UserEntity" id="UserMap">
+    <resultMap type="com.algorithm.demo.entity.User" id="UserMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="userId" column="user_id" jdbcType="VARCHAR"/>
         <result property="userName" column="user_name" jdbcType="VARCHAR"/>
@@ -10,16 +10,16 @@
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="isSupper" column="is_supper" jdbcType="INTEGER"/>
         <result property="creator" column="creator" jdbcType="VARCHAR"/>
-        <result property="createTime" column="create_time" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
         <result property="updater" column="updater" jdbcType="VARCHAR"/>
-        <result property="updateTime" column="update_time" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="UserMap">
         select
           id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time
-        from userEntity
+        from user
         where id = #{id}
     </select>
 
@@ -27,7 +27,7 @@
     <select id="queryAllByLimit" resultMap="UserMap">
         select
           id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time
-        from userEntity
+        from user
         <where>
             <if test="id != null">
                 and id = #{id}
@@ -66,7 +66,7 @@
     <!--统计总行数-->
     <select id="count" resultType="java.lang.Long">
         select count(1)
-        from userEntity
+        from user
         <where>
             <if test="id != null">
                 and id = #{id}
@@ -101,17 +101,17 @@
         </where>
     </select>
     <select id="queryUserByUidAndPwd" resultType="java.lang.Integer">
-        select count(1) from userEntity where user_id = #{userId} and password = #{password}
+        select count(1) from user where user_id = #{userId} and password = #{password}
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into userEntity(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
         values (#{userId}, #{userName}, #{sex}, #{password}, #{isSupper}, #{creator}, #{createTime}, #{updater}, #{updateTime})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into userEntity(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
         (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper}, #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime})
@@ -119,7 +119,7 @@
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into userEntity(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper}, #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime})
@@ -138,7 +138,7 @@
 
     <!--通过主键修改数据-->
     <update id="update">
-        update userEntity
+        update user
         <set>
             <if test="userId != null and userId != ''">
                 user_id = #{userId},
@@ -171,9 +171,14 @@
         where id = #{id}
     </update>
 
+    <update id="updatePwdByUidAndPwd">
+        update user set password=#{newPassword}
+        where user_id=#{userId} and password=#{password}
+    </update>
+
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from userEntity where id = #{id}
+        delete from user where id = #{id}
     </delete>
 
 </mapper>

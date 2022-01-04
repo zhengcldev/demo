@@ -1,6 +1,6 @@
 package com.algorithm.demo.service;
 
-import com.algorithm.demo.entity.UserEntity;
+import com.algorithm.demo.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -18,7 +18,7 @@ public interface UserService {
      * @param id 主键
      * @return 实例对象
      */
-    UserEntity queryById(Integer id);
+    User queryById(Integer id);
 
     /**
      * 根据用户id和密码查询，用于登陆
@@ -32,27 +32,36 @@ public interface UserService {
     /**
      * 分页查询
      *
-     * @param userEntity 筛选条件
+     * @param user 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<UserEntity> queryByPage(UserEntity userEntity, PageRequest pageRequest);
+    Page<User> queryByPage(User user, PageRequest pageRequest);
 
     /**
      * 新增数据
      *
-     * @param userEntity 实例对象
+     * @param user 实例对象
      * @return 实例对象
      */
-    UserEntity insert(UserEntity userEntity);
+    User insert(User user);
 
     /**
      * 修改数据
      *
-     * @param userEntity 实例对象
+     * @param user 实例对象
      * @return 实例对象
      */
-    UserEntity update(UserEntity userEntity);
+    User update(User user);
+
+    /**
+     *
+     * @param userId 用户id
+     * @param password 原始密码
+     * @param newPassword 新密码
+     * @return 布尔值
+     */
+    boolean updatePassword(String userId, String password, String newPassword);
 
     /**
      * 通过主键删除数据

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.algorithm.demo.dao.AlgorithmDao">
+
+    <resultMap type="com.algorithm.demo.entity.Algorithm" id="AlgorithmMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="algoName" column="algo_name" jdbcType="VARCHAR"/>
+        <result property="algoAuthor" column="algo_author" jdbcType="VARCHAR"/>
+        <result property="algoYear" column="algo_year" jdbcType="INTEGER"/>
+        <result property="addName" column="add_name" jdbcType="VARCHAR"/>
+        <result property="addTime" column="add_time" jdbcType="VARCHAR"/>
+        <result property="isSource" column="is_source" jdbcType="INTEGER"/>
+        <result property="algoUrl" column="algo_url" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询所有数据集-->
+    <select id="queryAlgoBySource" resultMap="AlgorithmMap">
+        select *
+        from algorithm
+        <where>
+        <if test="isSource != null and isSource != ''">
+            and is_source = #{isSource}
+        </if>
+        <if test="algoName != null and algoName !=''">
+            and algo_name = #{algoName}
+        </if>
+        </where>
+    </select>
+    <!--查询单个-->
+    <select id="queryById" resultMap="AlgorithmMap">
+        select
+          id, algo_name, algo_author, algo_year, add_name, add_time, is_source, algo_url
+        from algorithm
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AlgorithmMap">
+        select
+          id, algo_name, algo_author, algo_year, add_name, add_time, is_source, algo_url
+        from algorithm
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="algoName != null and algoName != ''">
+                and algo_name = #{algoName}
+            </if>
+            <if test="algoAuthor != null and algoAuthor != ''">
+                and algo_author = #{algoAuthor}
+            </if>
+            <if test="algoYear != null">
+                and algo_year = #{algoYear}
+            </if>
+            <if test="addName != null and addName != ''">
+                and add_name = #{addName}
+            </if>
+            <if test="addTime != null and addTime != ''">
+                and add_time = #{addTime}
+            </if>
+            <if test="isSource != null">
+                and is_source = #{isSource}
+            </if>
+            <if test="algoUrl != null and algoUrl != ''">
+                and algo_url = #{algoUrl}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from algorithm
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="algoName != null and algoName != ''">
+                and algo_name = #{algoName}
+            </if>
+            <if test="algoAuthor != null and algoAuthor != ''">
+                and algo_author = #{algoAuthor}
+            </if>
+            <if test="algoYear != null">
+                and algo_year = #{algoYear}
+            </if>
+            <if test="addName != null and addName != ''">
+                and add_name = #{addName}
+            </if>
+            <if test="addTime != null and addTime != ''">
+                and add_time = #{addTime}
+            </if>
+            <if test="isSource != null">
+                and is_source = #{isSource}
+            </if>
+            <if test="algoUrl != null and algoUrl != ''">
+                and algo_url = #{algoUrl}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into algorithm(algo_name, algo_author, algo_year, add_name, add_time, is_source, algo_url)
+        values (#{algoName}, #{algoAuthor}, #{algoYear}, #{addName}, #{addTime}, #{isSource}, #{algoUrl})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into algorithm(algo_name, algo_author, algo_year, add_name, add_time, is_source, algo_url)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.algoName}, #{entity.algoAuthor}, #{entity.algoYear}, #{entity.addName}, #{entity.addTime}, #{entity.isSource}, #{entity.algoUrl})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into algorithm(algo_name, algo_author, algo_year, add_name, add_time, is_source, algo_url)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.algoName}, #{entity.algoAuthor}, #{entity.algoYear}, #{entity.addName}, #{entity.addTime}, #{entity.isSource}, #{entity.algoUrl})
+        </foreach>
+        on duplicate key update
+        algo_name = values(algo_name),
+        algo_author = values(algo_author),
+        algo_year = values(algo_year),
+        add_name = values(add_name),
+        add_time = values(add_time),
+        is_source = values(is_source),
+        algo_url = values(algo_url)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update algorithm
+        <set>
+            <if test="algoName != null and algoName != ''">
+                algo_name = #{algoName},
+            </if>
+            <if test="algoAuthor != null and algoAuthor != ''">
+                algo_author = #{algoAuthor},
+            </if>
+            <if test="algoYear != null">
+                algo_year = #{algoYear},
+            </if>
+            <if test="addName != null and addName != ''">
+                add_name = #{addName},
+            </if>
+            <if test="addTime != null and addTime != ''">
+                add_time = #{addTime},
+            </if>
+            <if test="isSource != null">
+                is_source = #{isSource},
+            </if>
+            <if test="algoUrl != null and algoUrl != ''">
+                algo_url = #{algoUrl},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from algorithm where id = #{id}
+    </delete>
+
+</mapper>
+

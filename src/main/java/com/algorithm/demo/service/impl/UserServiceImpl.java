@@ -1,7 +1,7 @@
 package com.algorithm.demo.service.impl;
 
-import com.algorithm.demo.entity.UserEntity;
 import com.algorithm.demo.dao.UserDao;
+import com.algorithm.demo.entity.User;
 import com.algorithm.demo.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -28,51 +28,57 @@ public class UserServiceImpl implements UserService {
      * @return 实例对象
      */
     @Override
-    public UserEntity queryById(Integer id) {
+    public User queryById(Integer id) {
         return this.userDao.queryById(id);
     }
 
     @Override
     public Boolean queryUser(String userId, String password) {
-        int res=userDao.queryUserByUidAndPwd(userId,password);
+        int res = userDao.queryUserByUidAndPwd(userId, password);
         return res != 0;
     }
 
     /**
      * 分页查询
      *
-     * @param userEntity 筛选条件
-     * @param pageRequest      分页对象
+     * @param user        筛选条件
+     * @param pageRequest 分页对象
      * @return 查询结果
      */
     @Override
-    public Page<UserEntity> queryByPage(UserEntity userEntity, PageRequest pageRequest) {
-        long total = this.userDao.count(userEntity);
-        return new PageImpl<>(this.userDao.queryAllByLimit(userEntity, pageRequest), pageRequest, total);
+    public Page<User> queryByPage(User user, PageRequest pageRequest) {
+        long total = this.userDao.count(user);
+        return new PageImpl<>(this.userDao.queryAllByLimit(user, pageRequest), pageRequest, total);
     }
 
     /**
      * 新增数据
      *
-     * @param userEntity 实例对象
+     * @param user 实例对象
      * @return 实例对象
      */
     @Override
-    public UserEntity insert(UserEntity userEntity) {
-        this.userDao.insert(userEntity);
-        return userEntity;
+    public User insert(User user) {
+        this.userDao.insert(user);
+        return user;
     }
 
     /**
      * 修改数据
      *
-     * @param userEntity 实例对象
+     * @param user 实例对象
      * @return 实例对象
      */
     @Override
-    public UserEntity update(UserEntity userEntity) {
-        this.userDao.update(userEntity);
-        return this.queryById(userEntity.getId());
+    public User update(User user) {
+        this.userDao.update(user);
+        return this.queryById(user.getId());
+    }
+
+    @Override
+    public boolean updatePassword(String userId, String password, String newPassword) {
+        int result=userDao.updatePwdByUidAndPwd(userId, password, newPassword);
+        return result!=0;
     }
 
     /**
