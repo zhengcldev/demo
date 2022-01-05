@@ -8,11 +8,11 @@ import java.io.Serializable;
  * 算法演示系统用户表(User)实体类
  *
  * @author makejava
- * @since 2021-12-22 13:29:48
+ * @since 2022-01-05 18:14:03
  */
 @Data
 public class User implements Serializable {
-    private static final long serialVersionUID = 236567286624691246L;
+    private static final long serialVersionUID = 693008325644539105L;
     /**
      * 用户表自增id
      */
@@ -53,6 +53,30 @@ public class User implements Serializable {
      * 更新时间
      */
     private String updateTime;
+    /**
+     * 住址
+     */
+    private String address;
+    /**
+     * 电话号码
+     */
+    private String tel;
+    /**
+     * 邮箱地址
+     */
+    private String email;
+    /**
+     * 所属机构
+     */
+    private String dept;
+    /**
+     * 个人简介
+     */
+    private String introduction;
+    /**
+     * 头像地址
+     */
+    private String pfpUrl;
 
 }
 
