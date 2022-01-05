@@ -18,7 +18,7 @@ public interface UserService {
      * @param id 主键
      * @return 实例对象
      */
-    User queryById(Integer id);
+    User queryById(String id);
 
     /**
      * 根据用户id和密码查询，用于登陆

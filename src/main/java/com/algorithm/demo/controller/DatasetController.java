@@ -33,7 +33,7 @@ public class DatasetController {
     @GetMapping("/getDataset")
     public Resp<Object> getDataset() {
         List<Dataset> datasetList = datasetService.queryDataset();
-        Resp<Object> rsp = new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), datasetList);
+        Resp<Object> rsp = new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), datasetList);
         return rsp;
     }
 }

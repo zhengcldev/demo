@@ -13,20 +13,30 @@
         <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
         <result property="updater" column="updater" jdbcType="VARCHAR"/>
         <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="tel" column="tel" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="dept" column="dept" jdbcType="VARCHAR"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="pfpUrl" column="pfp_url" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="UserMap">
         select
-          id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time
+          id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url
         from user
-        where id = #{id}
+        <where>
+         <if test="userId != null">
+            and user_id = #{userId}
+        </if>
+        </where>
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="UserMap">
         select
-          id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time
+          id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url
         from user
         <where>
             <if test="id != null">
@@ -50,14 +60,32 @@
             <if test="creator != null and creator != ''">
                 and creator = #{creator}
             </if>
-            <if test="createTime != null">
+            <if test="createTime != null and createTime != ''">
                 and create_time = #{createTime}
             </if>
             <if test="updater != null and updater != ''">
                 and updater = #{updater}
             </if>
-            <if test="updateTime != null">
+            <if test="updateTime != null and updateTime != ''">
                 and update_time = #{updateTime}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="tel != null and tel != ''">
+                and tel = #{tel}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="dept != null and dept != ''">
+                and dept = #{dept}
+            </if>
+            <if test="introduction != null and introduction != ''">
+                and introduction = #{introduction}
+            </if>
+            <if test="pfpUrl != null and pfpUrl != ''">
+                and pfp_url = #{pfpUrl}
             </if>
         </where>
         limit #{pageable.offset}, #{pageable.pageSize}
@@ -89,14 +117,32 @@
             <if test="creator != null and creator != ''">
                 and creator = #{creator}
             </if>
-            <if test="createTime != null">
+            <if test="createTime != null and createTime != ''">
                 and create_time = #{createTime}
             </if>
             <if test="updater != null and updater != ''">
                 and updater = #{updater}
             </if>
-            <if test="updateTime != null">
+            <if test="updateTime != null and updateTime != ''">
                 and update_time = #{updateTime}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="tel != null and tel != ''">
+                and tel = #{tel}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="dept != null and dept != ''">
+                and dept = #{dept}
+            </if>
+            <if test="introduction != null and introduction != ''">
+                and introduction = #{introduction}
+            </if>
+            <if test="pfpUrl != null and pfpUrl != ''">
+                and pfp_url = #{pfpUrl}
             </if>
         </where>
     </select>
@@ -106,23 +152,23 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
-        values (#{userId}, #{userName}, #{sex}, #{password}, #{isSupper}, #{creator}, #{createTime}, #{updater}, #{updateTime})
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url)
+        values (#{userId}, #{userName}, #{sex}, #{password}, #{isSupper}, #{creator}, #{createTime}, #{updater}, #{updateTime}, #{address}, #{tel}, #{email}, #{dept}, #{introduction}, #{pfpUrl})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url)
         values
         <foreach collection="entities" item="entity" separator=",">
-        (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper}, #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime})
+        (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper}, #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime}, #{entity.address}, #{entity.tel}, #{entity.email}, #{entity.dept}, #{entity.introduction}, #{entity.pfpUrl})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time)
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper}, #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime})
+            (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper}, #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime}, #{entity.address}, #{entity.tel}, #{entity.email}, #{entity.dept}, #{entity.introduction}, #{entity.pfpUrl})
         </foreach>
         on duplicate key update
         user_id = values(user_id),
@@ -133,7 +179,13 @@
         creator = values(creator),
         create_time = values(create_time),
         updater = values(updater),
-        update_time = values(update_time)
+        update_time = values(update_time),
+        address = values(address),
+        tel = values(tel),
+        email = values(email),
+        dept = values(dept),
+        introduction = values(introduction),
+        pfp_url = values(pfp_url)
     </insert>
 
     <!--通过主键修改数据-->
@@ -158,14 +210,32 @@
             <if test="creator != null and creator != ''">
                 creator = #{creator},
             </if>
-            <if test="createTime != null">
+            <if test="createTime != null and createTime != ''">
                 create_time = #{createTime},
             </if>
             <if test="updater != null and updater != ''">
                 updater = #{updater},
             </if>
-            <if test="updateTime != null">
+            <if test="updateTime != null and updateTime != ''">
                 update_time = #{updateTime},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="tel != null and tel != ''">
+                tel = #{tel},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="dept != null and dept != ''">
+                dept = #{dept},
+            </if>
+            <if test="introduction != null and introduction != ''">
+                introduction = #{introduction},
+            </if>
+            <if test="pfpUrl != null and pfpUrl != ''">
+                pfp_url = #{pfpUrl},
             </if>
         </set>
         where id = #{id}

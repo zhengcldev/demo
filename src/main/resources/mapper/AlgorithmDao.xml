@@ -18,10 +18,10 @@
         select *
         from algorithm
         <where>
-        <if test="isSource != null and isSource != ''">
+        <if test="isSource != null">
             and is_source = #{isSource}
         </if>
-        <if test="algoName != null and algoName !=''">
+        <if test="algoName != null">
             and algo_name = #{algoName}
         </if>
         </where>

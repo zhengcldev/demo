@@ -35,7 +35,7 @@ public class AlgorithmController {
     public Resp<Object> getDataset(@RequestParam(name = "isSource",required = false)Integer isSource,
     @RequestParam(name = "algoName",required = false)String algoName) {
         List<Algorithm> algorithmList = algorithmService.queryAlgorithm(isSource,algoName);
-        Resp<Object> rsp = new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), algorithmList);
+        Resp<Object> rsp = new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), algorithmList);
         return rsp;
     }
 

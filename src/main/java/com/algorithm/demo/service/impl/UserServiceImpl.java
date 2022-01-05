@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
      * @return 实例对象
      */
     @Override
-    public User queryById(Integer id) {
+    public User queryById(String id) {
         return this.userDao.queryById(id);
     }
 
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         this.userDao.update(user);
-        return this.queryById(user.getId());
+        return this.queryById(String.valueOf(user.getId()));
     }
 
     @Override
