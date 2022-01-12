@@ -6,7 +6,10 @@ server:
       charset: utf-8
       force: true
       enabled: true
+
 spring:
+  mvc:
+    static-path-pattern: /**
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF-8&useSSL=false

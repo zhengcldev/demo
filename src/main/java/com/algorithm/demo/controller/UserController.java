@@ -9,13 +9,18 @@ import com.algorithm.demo.service.VerifyCodeService;
 import com.algorithm.demo.service.impl.SimpleCharVerifyCodeGenImpl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import static com.algorithm.demo.configuration.Constant.baseUrl;
 
 /**
  * @描述:
@@ -65,6 +70,16 @@ public class UserController {
         return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), isSuccess);
     }
 
+    /**
+     * 修改用户密码
+     */
+    @PostMapping(value = "/createUser")
+    public Resp<Object> createUser(@RequestBody User userInfo) {
+        User user= userService.insert(userInfo);
+        boolean isSuccess= user.equals(userInfo);
+        return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), isSuccess);
+    }
+
     @GetMapping(value = "/userInfo")
     public Resp<Object> getUserInfo(@RequestParam(name = "userId", required = false) String userId) {
         User user = userService.queryById(userId);
@@ -95,6 +110,52 @@ public class UserController {
             response.getOutputStream().flush();
         } catch (IOException e) {
             log.info("", e);
+        }
+    }
+    /**
+     * 用户头像上传
+     */
+    @PostMapping("/pfpUpload")
+    public String pfpUpload(@RequestParam("picFile") MultipartFile picture) {
+
+        //获取文件在服务器的储存位置/Users/zhengchuanlong/demonstration/src/main/resources/static
+        String path = "/Users/zhengchuanlong/demonstration/src/main/resources/static";
+        File filePath = new File(path);
+        if (!filePath.exists() && !filePath.isDirectory()) {
+           boolean isCreate= filePath.mkdir();
+           if(!isCreate){
+               System.out.println("error");
+               return null;
+           }
+        }
+
+        //获取原始文件名称(包含格式)
+        String originalFileName = picture.getOriginalFilename();
+        //获取文件类型，以最后一个`.`为标识
+        assert originalFileName != null;
+        String type = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        //获取文件名称（不包含格式）
+        String name = originalFileName.substring(0, originalFileName.lastIndexOf("."));
+
+        //设置文件新名称: 当前时间+文件名称（不包含格式）
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = sdf.format(d);
+        String fileName =  name + date + "." + type;
+
+        //在指定路径下创建一个文件
+        File targetFile = new File(path, fileName);
+
+        //将文件保存到服务器指定位置
+        try {
+            picture.transferTo(targetFile);
+            //将文件在服务器的存储路径返回
+            System.out.println("添加成功");
+            return baseUrl+"/"+fileName;
+        } catch (IOException e) {
+            System.out.println("上传失败");
+            e.printStackTrace();
+            return null;
         }
     }
 }
