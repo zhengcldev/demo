@@ -38,6 +38,11 @@ public class DatasetServiceImpl implements DatasetService {
         return datasetDao.queryAll();
     }
 
+    @Override
+    public int updateDataset(Dataset dataset) {
+        return this.datasetDao.updateDataset(dataset);
+    }
+
     /**
      * 分页查询
      *

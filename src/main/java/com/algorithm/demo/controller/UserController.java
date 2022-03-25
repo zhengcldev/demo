@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import static com.algorithm.demo.configuration.Constant.baseUrl;
 
 /**
@@ -48,7 +50,13 @@ public class UserController {
         Boolean isLogin = userService.queryUser(loginInfo.get("userId"), loginInfo.get("password"));
         resultMap.put("isLogin", isLogin);
         if (isLogin) {
-            return new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), resultMap);
+            User user = userService.queryById(loginInfo.get("userId")).get(0);
+            resultMap.put("isSupper", user.getIsSupper());
+            if (user.getState() == 1) {
+                return new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), resultMap);
+            } else {
+                return new Resp<>(StatusEnum.USER_LOCKED.getStatusCode(),StatusEnum.USER_LOCKED.getStatusMsg(),null);
+            }
         } else {
             resultMap.put("Msg", "账号或密码不正确");
             return new Resp<>(StatusEnum.LOGIN_ERROR.getStatusCode(), StatusEnum.LOGIN_ERROR.getStatusMsg(), resultMap);
@@ -75,16 +83,51 @@ public class UserController {
      */
     @PostMapping(value = "/createUser")
     public Resp<Object> createUser(@RequestBody User userInfo) {
-        User user= userService.insert(userInfo);
-        boolean isSuccess= user.equals(userInfo);
+        if (userService.userExistVerify(userInfo)) {
+            return new Resp<>(StatusEnum.USER_EXIST.getStatusCode(), StatusEnum.USER_EXIST.getStatusMsg(), null);
+        }
+        User user = userService.insert(userInfo);
+        boolean isSuccess = user.equals(userInfo);
         return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), isSuccess);
     }
 
     @GetMapping(value = "/userInfo")
     public Resp<Object> getUserInfo(@RequestParam(name = "userId", required = false) String userId) {
-        User user = userService.queryById(userId);
+        List<User> user = userService.queryById(userId);
+        if (user.size() == 1) {
+            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user.get(0));
+        }
         return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user);
     }
+
+    /**
+     * 锁定与解锁用户
+     * @param user 用户信息
+     * @return 状态
+     */
+    @PostMapping(value = "/lock")
+    public Resp<Object> updateState(@RequestBody User user) {
+        int result = userService.updateState(user);
+        if (result != 0) {
+            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user);
+        } else {
+            return new Resp<>(StatusEnum.OPERATION_FAIL.getStatusCode(), StatusEnum.OPERATION_FAIL.getStatusMsg(), null);
+        }
+    }
+
+    /**
+     *重置密码
+     */
+    @PostMapping(value="/resetPassword")
+    public Resp<Object> resetPassword(@RequestBody User user){
+        String result = userService.resetPassword(user);
+        if (result != null) {
+            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), result);
+        } else {
+            return new Resp<>(StatusEnum.OPERATION_FAIL.getStatusCode(), StatusEnum.OPERATION_FAIL.getStatusMsg(), null);
+        }
+    }
+
 
     /**
      * 生成验证
@@ -112,6 +155,7 @@ public class UserController {
             log.info("", e);
         }
     }
+
     /**
      * 用户头像上传
      */
@@ -122,11 +166,11 @@ public class UserController {
         String path = "/Users/zhengchuanlong/demonstration/src/main/resources/static";
         File filePath = new File(path);
         if (!filePath.exists() && !filePath.isDirectory()) {
-           boolean isCreate= filePath.mkdir();
-           if(!isCreate){
-               System.out.println("error");
-               return null;
-           }
+            boolean isCreate = filePath.mkdir();
+            if (!isCreate) {
+                System.out.println("error");
+                return null;
+            }
         }
 
         //获取原始文件名称(包含格式)
@@ -141,7 +185,7 @@ public class UserController {
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String date = sdf.format(d);
-        String fileName =  name + date + "." + type;
+        String fileName = name + date + "." + type;
 
         //在指定路径下创建一个文件
         File targetFile = new File(path, fileName);
@@ -151,7 +195,7 @@ public class UserController {
             picture.transferTo(targetFile);
             //将文件在服务器的存储路径返回
             System.out.println("添加成功");
-            return baseUrl+"/"+fileName;
+            return baseUrl + "/" + fileName;
         } catch (IOException e) {
             System.out.println("上传失败");
             e.printStackTrace();

@@ -29,6 +29,7 @@ public interface DatasetDao {
      */
     Dataset queryById(Integer id);
 
+    int updateDataset(Dataset dataset);
     /**
      * 查询指定行数据
      *

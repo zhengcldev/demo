@@ -4,6 +4,8 @@ import com.algorithm.demo.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 /**
  * 算法演示系统用户表(User)表服务接口
  *
@@ -18,7 +20,9 @@ public interface UserService {
      * @param id 主键
      * @return 实例对象
      */
-    User queryById(String id);
+    List<User> queryById(String id);
+
+    String resetPassword(User user);
 
     /**
      * 根据用户id和密码查询，用于登陆
@@ -47,12 +51,26 @@ public interface UserService {
     User insert(User user);
 
     /**
+     * 判断添加用户是否存在
+     * @param user 用户信息
+     * @return
+     */
+    Boolean userExistVerify(User user);
+
+    /**
      * 修改数据
      *
      * @param user 实例对象
      * @return 实例对象
      */
     User update(User user);
+
+    /**
+     * 更新用户锁定状态
+     * @param user 用户信息
+     * @return 实力对象
+     */
+    int updateState(User user);
 
     /**
      *
