@@ -1,6 +1,7 @@
 package com.algorithm.demo.service;
 
 import com.algorithm.demo.entity.User;
+import com.algorithm.demo.resp.Resp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -31,7 +32,7 @@ public interface UserService {
      * @param  password 用户密码
      * @return 返回bool值
      */
-    Boolean queryUser(String userId, String password);
+    Resp<Object> queryUser(String userId, String password);
 
     /**
      * 分页查询

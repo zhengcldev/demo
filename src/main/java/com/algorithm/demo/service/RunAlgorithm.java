@@ -1,6 +1,7 @@
 package com.algorithm.demo.service;
 
 import com.algorithm.demo.algorithm.SFUI_UF.SFUI_UF;
+import com.algorithm.demo.algorithm.SFU_CE.SFU_CE;
 import com.algorithm.demo.algorithm.SFU_Miner.AlgoSFUPMinerUemax;
 import com.algorithm.demo.algorithm.SKYFUP_B.AlgoSFUPMinerUgmaxB;
 import com.algorithm.demo.algorithm.SKYFUP_D.AlgoSFUPMinerUgmaxD;
@@ -33,8 +34,7 @@ public class RunAlgorithm {
         Map<String, List<Object>> memoryMap = new HashMap<>();
         Map<String, List<Object>> SFUIMap = new HashMap<>();
         Map<String, List<Object>> searchSpaceMap = new HashMap<>();
-        int size = 0;
-        List<String> algorithm = new ArrayList<>();
+        List<String> algorithm;
         //input file
         try {
             log.info("-------algo run start-------");
@@ -53,77 +53,103 @@ public class RunAlgorithm {
                 //循环执行全部算法，todo 可以抽取成一个配置
                 for (String algoName : algorithm) {
 
-                    if (algoName.equals(Algo_SFUI_UF)) {
-                        AlgoResult algoSFUI_UFResult = new AlgoResult();
-                        try {
-                            //SFUI_UF
-                            SFUI_UF uf = new SFUI_UF();
-                            uf.runSFUI_UF(file);
-                            algoSFUI_UFResult = uf.getResult();
-                            algoSFUI_UFResult.setDataName(data);
-                            runtimeList.add(Double.parseDouble(algoSFUI_UFResult.getRunTime()));
-                            memoryList.add(Double.parseDouble(algoSFUI_UFResult.getRunMemory()));
-                            SFUIList.add(Double.parseDouble(algoSFUI_UFResult.getSFUI()));
-                            searchSpaceList.add(Double.parseDouble(algoSFUI_UFResult.getSearchSpace()));
-                            //algoResultList.add(algoSFUI_UFResult);
-                            log.info("Algorithm SFUI-UF run finished");
-                        } catch (Exception e) {
-                            log.info("SFUI-UF Exception {}", String.valueOf(e));
-                            //algoResultList.add(algoSFUI_UFResult);
+                    switch (algoName) {
+                        case Algo_SFUI_UF:
+                            AlgoResult algoSFUI_UFResult = new AlgoResult();
+                            try {
+                                //SFUI_UF
+                                SFUI_UF uf = new SFUI_UF();
+                                uf.runSFUI_UF(file);
+                                algoSFUI_UFResult = uf.getResult();
+                                algoSFUI_UFResult.setDataName(data);
+                                runtimeList.add(Double.parseDouble(algoSFUI_UFResult.getRunTime()));
+                                memoryList.add(Double.parseDouble(algoSFUI_UFResult.getRunMemory()));
+                                SFUIList.add(Double.parseDouble(algoSFUI_UFResult.getSFUI()));
+                                searchSpaceList.add(Double.parseDouble(algoSFUI_UFResult.getSearchSpace()));
+                                //algoResultList.add(algoSFUI_UFResult);
+                                log.info("Algorithm SFUI-UF run finished");
+                            } catch (Exception e) {
+                                log.info("SFUI-UF Exception {}", String.valueOf(e));
+                                //algoResultList.add(algoSFUI_UFResult);
+                            }
+                            break;
+                        case Algo_SFU_CE:
+                            AlgoResult algoSFU_CE = new AlgoResult();
+                            try {
+                                //SFU_CE
+                                SFU_CE ce = new SFU_CE();
+                                ce.runSFU_CE(file);
+                                algoSFU_CE = ce.getAlgoResult();
+                                algoSFU_CE.setDataName(data);
+                                runtimeList.add(Double.parseDouble(algoSFU_CE.getRunTime()));
+                                memoryList.add(Double.parseDouble(algoSFU_CE.getRunMemory()));
+                                SFUIList.add(Double.parseDouble(algoSFU_CE.getSFUI()));
+                                //algoResultList.add(algoSFU_CE);
+                                log.info("Algorithm SFU-CE run finished");
+                            } catch (Exception e) {
+                                log.info("SFU-CE Exception {}", String.valueOf(e));
+                                //algoResultList.add(algoSFU_CE);
+                            }
+                            break;
+                        case Algo_SFU_Miner: {
+                            AlgoResult algoSFU_MinerResult = new AlgoResult();
+                            try {
+                                //SFU_Miner
+                                AlgoSFUPMinerUemax sfupMine = new AlgoSFUPMinerUemax();
+                                sfupMine.runAlgorithm(file);
+                                algoSFU_MinerResult = sfupMine.getAlgoResult();
+                                algoSFU_MinerResult.setDataName(data);
+                                runtimeList.add(Double.parseDouble(algoSFU_MinerResult.getRunTime()));
+                                memoryList.add(Double.parseDouble(algoSFU_MinerResult.getRunMemory()));
+                                SFUIList.add(Double.parseDouble(algoSFU_MinerResult.getSFUI()));
+                                searchSpaceList.add(Double.parseDouble(algoSFU_MinerResult.getSearchSpace()));
+                                //algoResultList.add(algoSFU_MinerResult);
+                                log.info("Algorithm SFU-Miner run finished");
+                            } catch (Exception e) {
+                                log.info("SFU-Miner Exception {}", String.valueOf(e));
+                                //algoResultList.add(algoSFU_MinerResult);
+                            }
+                            break;
                         }
-                    } else if (algoName.equals(Algo_SFU_Miner)) {
-                        AlgoResult algoSFU_MinerResult = new AlgoResult();
-                        try {
-                            //SFU_Miner
-                            AlgoSFUPMinerUemax sfupMine = new AlgoSFUPMinerUemax();
-                            sfupMine.runAlgorithm(file);
-                            algoSFU_MinerResult = sfupMine.getAlgoResult();
-                            algoSFU_MinerResult.setDataName(data);
-                            runtimeList.add(Double.parseDouble(algoSFU_MinerResult.getRunTime()));
-                            memoryList.add(Double.parseDouble(algoSFU_MinerResult.getRunMemory()));
-                            SFUIList.add(Double.parseDouble(algoSFU_MinerResult.getSFUI()));
-                            searchSpaceList.add(Double.parseDouble(algoSFU_MinerResult.getSearchSpace()));
-                            //algoResultList.add(algoSFU_MinerResult);
-                            log.info("Algorithm SFU-Miner run finished");
-                        } catch (Exception e) {
-                            log.info("SFU-Miner Exception {}", String.valueOf(e));
-                            //algoResultList.add(algoSFU_MinerResult);
+                        case Algo_SKYFUP_D: {
+                            AlgoResult algoSFU_MinerResult = new AlgoResult();
+                            try {
+                                //SKYFUP_D
+                                AlgoSFUPMinerUgmaxD skyfup_d = new AlgoSFUPMinerUgmaxD();
+                                skyfup_d.runAlgorithm(file);
+                                algoSFU_MinerResult = skyfup_d.getResult();
+                                algoSFU_MinerResult.setDataName(data);
+                                runtimeList.add(Double.parseDouble(algoSFU_MinerResult.getRunTime()));
+                                memoryList.add(Double.parseDouble(algoSFU_MinerResult.getRunMemory()));
+                                SFUIList.add(Double.parseDouble(algoSFU_MinerResult.getSFUI()));
+                                searchSpaceList.add(Double.parseDouble(algoSFU_MinerResult.getSearchSpace()));
+                                //algoResultList.add(algoSFU_MinerResult);
+                                log.info("Algorithm SKYFUP-D run finished");
+                            } catch (Exception e) {
+                                log.info("SKYFUP-D Exception {}", String.valueOf(e));
+                                //algoResultList.add(algoSFU_MinerResult);
+                            }
+                            break;
                         }
-                    } else if (algoName.equals(Algo_SKYFUP_D)) {
-                        AlgoResult algoSFU_MinerResult = new AlgoResult();
-                        try {
-                            //SKYFUP_D
-                            AlgoSFUPMinerUgmaxD skyfup_d = new AlgoSFUPMinerUgmaxD();
-                            skyfup_d.runAlgorithm(file);
-                            algoSFU_MinerResult = skyfup_d.getResult();
-                            algoSFU_MinerResult.setDataName(data);
-                            runtimeList.add(Double.parseDouble(algoSFU_MinerResult.getRunTime()));
-                            memoryList.add(Double.parseDouble(algoSFU_MinerResult.getRunMemory()));
-                            SFUIList.add(Double.parseDouble(algoSFU_MinerResult.getSFUI()));
-                            searchSpaceList.add(Double.parseDouble(algoSFU_MinerResult.getSearchSpace()));
-                            //algoResultList.add(algoSFU_MinerResult);
-                            log.info("Algorithm SKYFUP-D run finished");
-                        } catch (Exception e) {
-                            log.info("SKYFUP-D Exception {}", String.valueOf(e));
-                            //algoResultList.add(algoSFU_MinerResult);
-                        }
-                    } else if (algoName.equals(Algo_SKYFUP_B)) {
-                        AlgoResult algoSFU_MinerResult = new AlgoResult();
-                        try {
-                            //SKYFUP_B
-                            AlgoSFUPMinerUgmaxB skyfup_b = new AlgoSFUPMinerUgmaxB();
-                            skyfup_b.runAlgorithm(file);
-                            algoSFU_MinerResult = skyfup_b.getResult();
-                            algoSFU_MinerResult.setDataName(data);
-                            runtimeList.add(Double.parseDouble(algoSFU_MinerResult.getRunTime()));
-                            memoryList.add(Double.parseDouble(algoSFU_MinerResult.getRunMemory()));
-                            SFUIList.add(Double.parseDouble(algoSFU_MinerResult.getSFUI()));
-                            searchSpaceList.add(Double.parseDouble(algoSFU_MinerResult.getSearchSpace()));
-                            //algoResultList.add(algoSFU_MinerResult);
-                            log.info("Algorithm SKYFUP-B run finished");
-                        } catch (Exception e) {
-                            log.info("SKYFUP-B Exception {}", String.valueOf(e));
-                            //algoResultList.add(algoSFU_MinerResult);
+                        case Algo_SKYFUP_B: {
+                            AlgoResult algoSFU_MinerResult = new AlgoResult();
+                            try {
+                                //SKYFUP_B
+                                AlgoSFUPMinerUgmaxB skyfup_b = new AlgoSFUPMinerUgmaxB();
+                                skyfup_b.runAlgorithm(file);
+                                algoSFU_MinerResult = skyfup_b.getResult();
+                                algoSFU_MinerResult.setDataName(data);
+                                runtimeList.add(Double.parseDouble(algoSFU_MinerResult.getRunTime()));
+                                memoryList.add(Double.parseDouble(algoSFU_MinerResult.getRunMemory()));
+                                SFUIList.add(Double.parseDouble(algoSFU_MinerResult.getSFUI()));
+                                searchSpaceList.add(Double.parseDouble(algoSFU_MinerResult.getSearchSpace()));
+                                //algoResultList.add(algoSFU_MinerResult);
+                                log.info("Algorithm SKYFUP-B run finished");
+                            } catch (Exception e) {
+                                log.info("SKYFUP-B Exception {}", String.valueOf(e));
+                                //algoResultList.add(algoSFU_MinerResult);
+                            }
+                            break;
                         }
                     }
 

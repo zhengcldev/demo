@@ -7,6 +7,8 @@ import com.algorithm.demo.resp.Resp;
 import com.algorithm.demo.service.UserService;
 import com.algorithm.demo.service.VerifyCodeService;
 import com.algorithm.demo.service.impl.SimpleCharVerifyCodeGenImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,23 +45,26 @@ public class UserController {
     public Resp<Object> login(@RequestBody Map<String, String> loginInfo) {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("isLogin", false);
+        //验证码错误
         if (code.equals("") || !code.equalsIgnoreCase(loginInfo.get("code"))) {
-            resultMap.put("Msg", "请输入正确的验证码");
-            return new Resp<>(StatusEnum.LOGIN_ERROR.getStatusCode(), StatusEnum.LOGIN_ERROR.getStatusMsg(), resultMap);
+            return new Resp<>(StatusEnum.VCODE_ERROR.getStatusCode(), StatusEnum.VCODE_ERROR.getStatusMsg(), resultMap);
         }
-        Boolean isLogin = userService.queryUser(loginInfo.get("userId"), loginInfo.get("password"));
-        resultMap.put("isLogin", isLogin);
-        if (isLogin) {
-            User user = userService.queryById(loginInfo.get("userId")).get(0);
+        Resp<Object> isLogin = userService.queryUser(loginInfo.get("userId"), loginInfo.get("password"));
+        if (isLogin.getStatus().equals(StatusEnum.LOGIN_SUCCESS.getStatusCode())) {
+            resultMap.put("isLogin", true);
+        }
+        if (isLogin.getData() != null) {
+            User user = (User) isLogin.getData();
             resultMap.put("isSupper", user.getIsSupper());
+            //未锁定，登录成功
             if (user.getState() == 1) {
-                return new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(), StatusEnum.LOGIN_SUCCESS.getStatusMsg(), resultMap);
+                return new Resp<>(isLogin.getStatus(), isLogin.getMessage(), resultMap);
             } else {
-                return new Resp<>(StatusEnum.USER_LOCKED.getStatusCode(),StatusEnum.USER_LOCKED.getStatusMsg(),null);
+                //用户已锁定
+                return new Resp<>(StatusEnum.USER_LOCKED.getStatusCode(), StatusEnum.USER_LOCKED.getStatusMsg(), null);
             }
         } else {
-            resultMap.put("Msg", "账号或密码不正确");
-            return new Resp<>(StatusEnum.LOGIN_ERROR.getStatusCode(), StatusEnum.LOGIN_ERROR.getStatusMsg(), resultMap);
+            return new Resp<>(isLogin.getStatus(), isLogin.getMessage(), resultMap);
         }
 
     }
@@ -92,16 +97,26 @@ public class UserController {
     }
 
     @GetMapping(value = "/userInfo")
-    public Resp<Object> getUserInfo(@RequestParam(name = "userId", required = false) String userId) {
+    public Resp<Object> getUserInfo(@RequestParam(name = "userId", required = false) String userId,
+                                    @RequestParam(name = "pageNum", required = false) Integer pageNum,
+                                    @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        if (pageNum != null && pageSize != null)
+            PageHelper.startPage(pageNum, pageSize);
         List<User> user = userService.queryById(userId);
-        if (user.size() == 1) {
-            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user.get(0));
+        if (pageNum != null && pageSize != null) {
+            PageInfo<User> userPageInfo = new PageInfo<>(user);
+            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), userPageInfo);
+        } else {
+            if (user.size() == 1) {
+                return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user.get(0));
+            }
+            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user);
         }
-        return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user);
     }
 
     /**
      * 锁定与解锁用户
+     *
      * @param user 用户信息
      * @return 状态
      */
@@ -116,10 +131,10 @@ public class UserController {
     }
 
     /**
-     *重置密码
+     * 重置密码
      */
-    @PostMapping(value="/resetPassword")
-    public Resp<Object> resetPassword(@RequestBody User user){
+    @PostMapping(value = "/resetPassword")
+    public Resp<Object> resetPassword(@RequestBody User user) {
         String result = userService.resetPassword(user);
         if (result != null) {
             return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), result);

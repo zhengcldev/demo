@@ -8,11 +8,11 @@ import java.io.Serializable;
  * 数据集表，数据集信息描述(Dataset)实体类
  *
  * @author makejava
- * @since 2022-01-02 22:23:41
+ * @since 2022-04-03 17:04:01
  */
 @Data
 public class Dataset implements Serializable {
-    private static final long serialVersionUID = 156622125148872883L;
+    private static final long serialVersionUID = -24869742058837895L;
     /**
      * 数据集表自增id
      */
@@ -52,7 +52,7 @@ public class Dataset implements Serializable {
     /**
      * 数据集平均交易长度
      */
-    private Integer avgTransLen;
+    private Float avgTransLen;
     /**
      * 最大交易长度
      */
@@ -133,11 +133,11 @@ public class Dataset implements Serializable {
         this.itemCount = itemCount;
     }
 
-    public Integer getAvgTransLen() {
+    public Float getAvgTransLen() {
         return avgTransLen;
     }
 
-    public void setAvgTransLen(Integer avgTransLen) {
+    public void setAvgTransLen(Float avgTransLen) {
         this.avgTransLen = avgTransLen;
     }
 

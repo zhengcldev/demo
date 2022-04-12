@@ -12,7 +12,7 @@
         <result property="description" column="description" jdbcType="VARCHAR"/>
         <result property="transCount" column="trans_count" jdbcType="INTEGER"/>
         <result property="itemCount" column="item_count" jdbcType="INTEGER"/>
-        <result property="avgTransLen" column="avg_trans_len" jdbcType="INTEGER"/>
+        <result property="avgTransLen" column="avg_trans_len" jdbcType="NUMERIC"/>
         <result property="maxTransLen" column="max_trans_len" jdbcType="INTEGER"/>
         <result property="dataUrl" column="data_url" jdbcType="VARCHAR"/>
     </resultMap>

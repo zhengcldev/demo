@@ -25,5 +25,6 @@ public class Constant {
     public static final String Algo_SFUI_UF = "SFUI-UF";
     public static final String Algo_SKYFUP_D = "SKYFUP-D";
     public static final String Algo_SKYFUP_B = "SKYFUP-B";
+    public static final String Algo_SFU_CE = "SFU-CE";
 
 }

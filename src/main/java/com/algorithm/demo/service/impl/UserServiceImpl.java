@@ -2,6 +2,8 @@ package com.algorithm.demo.service.impl;
 
 import com.algorithm.demo.dao.UserDao;
 import com.algorithm.demo.entity.User;
+import com.algorithm.demo.enumeration.StatusEnum;
+import com.algorithm.demo.resp.Resp;
 import com.algorithm.demo.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -36,9 +38,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean queryUser(String userId, String password) {
-        int res = userDao.queryUserByUidAndPwd(userId, password);
-        return res != 0;
+    public Resp<Object> queryUser(String userId, String password) {
+        List<User> userList = userDao.queryById(userId);
+        if (userList.size()==0) {
+            //查无此人
+            return new Resp<>(StatusEnum.USER_NOT_EXIST.getStatusCode(),
+                    StatusEnum.USER_NOT_EXIST.getStatusMsg());
+        } else {
+            int res = userDao.queryUserByUidAndPwd(userId, password);
+            if (res == 0) {
+                //密码错误
+                return new Resp<>(StatusEnum.USER_ID_PWD_ERROR.getStatusCode(),
+                        StatusEnum.USER_ID_PWD_ERROR.getStatusMsg());
+            } else {
+                //登录成功
+                return new Resp<>(StatusEnum.LOGIN_SUCCESS.getStatusCode(),
+                        StatusEnum.LOGIN_SUCCESS.getStatusMsg(), userList.get(0));
+            }
+        }
     }
 
     /**
