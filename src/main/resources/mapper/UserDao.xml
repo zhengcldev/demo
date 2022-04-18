@@ -19,24 +19,27 @@
         <result property="dept" column="dept" jdbcType="VARCHAR"/>
         <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
         <result property="pfpUrl" column="pfp_url" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="UserMap">
         select
-          id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url
+        id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel,
+        email, dept, introduction, pfp_url, state
         from user
         <where>
-         <if test="userId != null">
-            and user_id = #{userId}
-        </if>
+            <if test="userId != null">
+                and user_id like '%' #{userId} '%'
+            </if>
         </where>
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="UserMap">
         select
-          id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url
+        id, user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel,
+        email, dept, introduction, pfp_url, state
         from user
         <where>
             <if test="id != null">
@@ -86,6 +89,9 @@
             </if>
             <if test="pfpUrl != null and pfpUrl != ''">
                 and pfp_url = #{pfpUrl}
+            </if>
+            <if test="state != null">
+                and state = #{state}
             </if>
         </where>
         limit #{pageable.offset}, #{pageable.pageSize}
@@ -144,31 +150,49 @@
             <if test="pfpUrl != null and pfpUrl != ''">
                 and pfp_url = #{pfpUrl}
             </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
         </where>
     </select>
     <select id="queryUserByUidAndPwd" resultType="java.lang.Integer">
-        select count(1) from user where user_id = #{userId} and password = #{password}
+        select count(1)
+        from user
+        where user_id = #{userId}
+          and password = #{password}
     </select>
+
+    <update id="resetPassword">
+        update user set password=#{password} where user_id=#{userId}
+    </update>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url)
-        values (#{userId}, #{userName}, #{sex}, #{password}, #{isSupper}, #{creator}, #{createTime}, #{updater}, #{updateTime}, #{address}, #{tel}, #{email}, #{dept}, #{introduction}, #{pfpUrl})
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time,
+                         address, tel, email, dept, introduction, pfp_url, state)
+        values (#{userId}, #{userName}, #{sex}, #{password}, #{isSupper}, #{creator}, #{createTime}, #{updater},
+                #{updateTime}, #{address}, #{tel}, #{email}, #{dept}, #{introduction}, #{pfpUrl}, #{state})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url)
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time,
+        address, tel, email, dept, introduction, pfp_url, state)
         values
         <foreach collection="entities" item="entity" separator=",">
-        (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper}, #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime}, #{entity.address}, #{entity.tel}, #{entity.email}, #{entity.dept}, #{entity.introduction}, #{entity.pfpUrl})
+            (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper},
+            #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime}, #{entity.address},
+            #{entity.tel}, #{entity.email}, #{entity.dept}, #{entity.introduction}, #{entity.pfpUrl}, #{entity.state})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time, address, tel, email, dept, introduction, pfp_url)
+        insert into user(user_id, user_name, sex, password, is_supper, creator, create_time, updater, update_time,
+        address, tel, email, dept, introduction, pfp_url, state)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper}, #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime}, #{entity.address}, #{entity.tel}, #{entity.email}, #{entity.dept}, #{entity.introduction}, #{entity.pfpUrl})
+            (#{entity.userId}, #{entity.userName}, #{entity.sex}, #{entity.password}, #{entity.isSupper},
+            #{entity.creator}, #{entity.createTime}, #{entity.updater}, #{entity.updateTime}, #{entity.address},
+            #{entity.tel}, #{entity.email}, #{entity.dept}, #{entity.introduction}, #{entity.pfpUrl}, #{entity.state})
         </foreach>
         on duplicate key update
         user_id = values(user_id),
@@ -185,8 +209,17 @@
         email = values(email),
         dept = values(dept),
         introduction = values(introduction),
-        pfp_url = values(pfp_url)
+        pfp_url = values(pfp_url),
+        state = values(state)
     </insert>
+
+    <update id="updateState">
+        update user
+        <set>
+            state = #{state}
+        </set>
+        where user_id = #{userId}
+    </update>
 
     <!--通过主键修改数据-->
     <update id="update">
@@ -237,18 +270,25 @@
             <if test="pfpUrl != null and pfpUrl != ''">
                 pfp_url = #{pfpUrl},
             </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
         </set>
         where id = #{id}
     </update>
 
     <update id="updatePwdByUidAndPwd">
-        update user set password=#{newPassword}
-        where user_id=#{userId} and password=#{password}
+        update user
+        set password=#{newPassword}
+        where user_id = #{userId}
+          and password = #{password}
     </update>
 
     <!--通过主键删除-->
-    <delete id="deleteById">
-        delete from user where id = #{id}
+    <delete id="deleteByUserId">
+        delete
+        from user
+        where user_id = #{userId}
     </delete>
 
 </mapper>

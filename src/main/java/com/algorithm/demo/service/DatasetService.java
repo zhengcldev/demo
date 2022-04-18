@@ -27,7 +27,9 @@ public interface DatasetService {
      *
      * @return 实例对象
      */
-    List<Dataset> queryDataset();
+    List<Dataset> queryDataset(int page,int pageSize);
+
+    int updateDataset(Dataset dataset);
 
     /**
      * 分页查询

@@ -20,7 +20,7 @@ public interface UserDao {
      * @param userId 主键
      * @return 实例对象
      */
-    User queryById(String userId);
+    List<User> queryById(String userId);
 
     /**
      * 查询用户
@@ -29,6 +29,8 @@ public interface UserDao {
      * @return 数据条数
      */
     int queryUserByUidAndPwd(String userId, String password);
+
+    int resetPassword(User user);
 
     /**
      * 查询指定行数据
@@ -80,6 +82,8 @@ public interface UserDao {
      */
     int update(User user);
 
+    int updateState(User user);
+
     int updatePwdByUidAndPwd(String userId, String password, String newPassword);
     /**
      * 通过主键删除数据
@@ -87,7 +91,7 @@ public interface UserDao {
      * @param id 主键
      * @return 影响行数
      */
-    int deleteById(Integer id);
+    int deleteByUserId(String userId);
 
 }
 

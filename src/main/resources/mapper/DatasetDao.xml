@@ -12,28 +12,80 @@
         <result property="description" column="description" jdbcType="VARCHAR"/>
         <result property="transCount" column="trans_count" jdbcType="INTEGER"/>
         <result property="itemCount" column="item_count" jdbcType="INTEGER"/>
-        <result property="avgTransLen" column="avg_trans_len" jdbcType="INTEGER"/>
+        <result property="avgTransLen" column="avg_trans_len" jdbcType="NUMERIC"/>
         <result property="maxTransLen" column="max_trans_len" jdbcType="INTEGER"/>
         <result property="dataUrl" column="data_url" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="DatasetMap">
-        select
-          id, data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count, avg_trans_len, max_trans_len, data_url
+        select id,
+               data_name,
+               is_real,
+               add_name,
+               add_time,
+               is_sparse,
+               description,
+               trans_count,
+               item_count,
+               avg_trans_len,
+               max_trans_len,
+               data_url
         from dataset
         where id = #{id}
     </select>
 
+    <update id="updateDataset">
+        update dataset
+        <set>
+            <if test="dataName != null and dataName != ''">
+                data_name = #{dataName},
+            </if>
+            <if test="isReal != null">
+                is_real = #{isReal},
+            </if>
+            <if test="addName != null and addName != ''">
+                add_name = #{addName},
+            </if>
+            <if test="addTime != null and addTime != ''">
+                add_time = #{addTime},
+            </if>
+            <if test="isSparse != null">
+                is_sparse = #{isSparse},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="transCount != null">
+                trans_count = #{transCount},
+            </if>
+            <if test="itemCount != null">
+                item_count = #{itemCount},
+            </if>
+            <if test="avgTransLen != null">
+                avg_trans_len = #{avgTransLen},
+            </if>
+            <if test="maxTransLen != null">
+                max_trans_len = #{maxTransLen},
+            </if>
+            <if test="dataUrl != null and dataUrl != ''">
+                data_url = #{dataUrl},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
     <!--查询所有数据集-->
     <select id="queryAll" resultMap="DatasetMap">
-        select * from dataset
+        select *
+        from dataset
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="DatasetMap">
         select
-          id, data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count, avg_trans_len, max_trans_len, data_url
+        id, data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count, avg_trans_len,
+        max_trans_len, data_url
         from dataset
         <where>
             <if test="id != null">
@@ -122,23 +174,31 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into dataset(data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count, avg_trans_len, max_trans_len, data_url)
-        values (#{dataName}, #{isReal}, #{addName}, #{addTime}, #{isSparse}, #{description}, #{transCount}, #{itemCount}, #{avgTransLen}, #{maxTransLen}, #{dataUrl})
+        insert into dataset(data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count,
+                            avg_trans_len, max_trans_len, data_url)
+        values (#{dataName}, #{isReal}, #{addName}, #{addTime}, #{isSparse}, #{description}, #{transCount},
+                #{itemCount}, #{avgTransLen}, #{maxTransLen}, #{dataUrl})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into dataset(data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count, avg_trans_len, max_trans_len, data_url)
+        insert into dataset(data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count,
+        avg_trans_len, max_trans_len, data_url)
         values
         <foreach collection="entities" item="entity" separator=",">
-        (#{entity.dataName}, #{entity.isReal}, #{entity.addName}, #{entity.addTime}, #{entity.isSparse}, #{entity.description}, #{entity.transCount}, #{entity.itemCount}, #{entity.avgTransLen}, #{entity.maxTransLen}, #{entity.dataUrl})
+            (#{entity.dataName}, #{entity.isReal}, #{entity.addName}, #{entity.addTime}, #{entity.isSparse},
+            #{entity.description}, #{entity.transCount}, #{entity.itemCount}, #{entity.avgTransLen},
+            #{entity.maxTransLen}, #{entity.dataUrl})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into dataset(data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count, avg_trans_len, max_trans_len, data_url)
+        insert into dataset(data_name, is_real, add_name, add_time, is_sparse, description, trans_count, item_count,
+        avg_trans_len, max_trans_len, data_url)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.dataName}, #{entity.isReal}, #{entity.addName}, #{entity.addTime}, #{entity.isSparse}, #{entity.description}, #{entity.transCount}, #{entity.itemCount}, #{entity.avgTransLen}, #{entity.maxTransLen}, #{entity.dataUrl})
+            (#{entity.dataName}, #{entity.isReal}, #{entity.addName}, #{entity.addTime}, #{entity.isSparse},
+            #{entity.description}, #{entity.transCount}, #{entity.itemCount}, #{entity.avgTransLen},
+            #{entity.maxTransLen}, #{entity.dataUrl})
         </foreach>
         on duplicate key update
         data_name = values(data_name),
@@ -197,7 +257,9 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from dataset where id = #{id}
+        delete
+        from dataset
+        where id = #{id}
     </delete>
 
 </mapper>

@@ -3,6 +3,7 @@ package com.algorithm.demo.service.impl;
 import com.algorithm.demo.entity.Dataset;
 import com.algorithm.demo.dao.DatasetDao;
 import com.algorithm.demo.service.DatasetService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -34,8 +35,15 @@ public class DatasetServiceImpl implements DatasetService {
     }
 
     @Override
-    public List<Dataset> queryDataset() {
-        return datasetDao.queryAll();
+    public List<Dataset> queryDataset(int page,int pageSize) {
+        PageHelper.startPage(page,pageSize);
+        List<Dataset> datasetList=datasetDao.queryAll();
+        return datasetList;
+    }
+
+    @Override
+    public int updateDataset(Dataset dataset) {
+        return this.datasetDao.updateDataset(dataset);
     }
 
     /**

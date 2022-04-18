@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.algorithm.demo.dao.LogDao">
+
+    <resultMap type="com.algorithm.demo.entity.Log" id="LogMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="loginTime" column="login_time" jdbcType="VARCHAR"/>
+        <result property="exitTime" column="exit_time" jdbcType="VARCHAR"/>
+        <result property="updatePwd" column="update_pwd" jdbcType="INTEGER"/>
+        <result property="editUser" column="edit_user" jdbcType="INTEGER"/>
+        <result property="readPaper" column="read_paper" jdbcType="INTEGER"/>
+        <result property="editData" column="edit_data" jdbcType="INTEGER"/>
+        <result property="algoRuntime" column="algo_runtime" jdbcType="INTEGER"/>
+        <result property="algoOffline" column="algo_offline" jdbcType="INTEGER"/>
+        <result property="userInfo" column="user_info" jdbcType="INTEGER"/>
+        <result property="loginFail" column="login_fail" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <!--查询单个-->
+    <select id="queryFuncLog" resultMap="LogMap">
+        select
+           SUM(update_pwd) as update_pwd, SUM(edit_user) as edit_user, SUM(read_paper) as read_paper, SUM(edit_data) as edit_data, SUM(algo_runtime) as algo_runtime, SUM(algo_offline) as algo_offline, SUM(user_info) as user_info
+        from log
+        where login_time>(unix_timestamp()-30*24*60*60*1000)
+    </select>
+
+    <select id="queryVisit" resultType="com.algorithm.demo.entity.Visit">
+        select FROM_UNIXTIME(login_time/1000,'%Y/%m/%d')as date,COUNT(*) as times
+        FROM log
+        GROUP BY FROM_UNIXTIME(login_time/1000,'%Y/%m/%d');
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LogMap">
+        select
+          id, user_id, login_time, exit_time, update_pwd, edit_user, read_paper, edit_data, algo_runtime, algo_offline, user_info, login_fail
+        from log
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="loginTime != null and loginTime != ''">
+                and login_time = #{loginTime}
+            </if>
+            <if test="exitTime != null and exitTime != ''">
+                and exit_time = #{exitTime}
+            </if>
+            <if test="updatePwd != null">
+                and update_pwd = #{updatePwd}
+            </if>
+            <if test="editUser != null">
+                and edit_user = #{editUser}
+            </if>
+            <if test="readPaper != null">
+                and read_paper = #{readPaper}
+            </if>
+            <if test="editData != null">
+                and edit_data = #{editData}
+            </if>
+            <if test="algoRuntime != null">
+                and algo_runtime = #{algoRuntime}
+            </if>
+            <if test="algoOffline != null">
+                and algo_offline = #{algoOffline}
+            </if>
+            <if test="userInfo != null">
+                and user_info = #{userInfo}
+            </if>
+            <if test="loginFail != null">
+                and login_fail = #{loginFail}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from log
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="loginTime != null and loginTime != ''">
+                and login_time = #{loginTime}
+            </if>
+            <if test="exitTime != null and exitTime != ''">
+                and exit_time = #{exitTime}
+            </if>
+            <if test="updatePwd != null">
+                and update_pwd = #{updatePwd}
+            </if>
+            <if test="editUser != null">
+                and edit_user = #{editUser}
+            </if>
+            <if test="readPaper != null">
+                and read_paper = #{readPaper}
+            </if>
+            <if test="editData != null">
+                and edit_data = #{editData}
+            </if>
+            <if test="algoRuntime != null">
+                and algo_runtime = #{algoRuntime}
+            </if>
+            <if test="algoOffline != null">
+                and algo_offline = #{algoOffline}
+            </if>
+            <if test="userInfo != null">
+                and user_info = #{userInfo}
+            </if>
+            <if test="loginFail != null">
+                and login_fail = #{loginFail}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into log(user_id, login_time, exit_time, update_pwd, edit_user, read_paper, edit_data, algo_runtime, algo_offline, user_info, login_fail)
+        values (#{userId}, #{loginTime}, #{exitTime}, 0, 0, 0, 0, 0, 0, 0, 0)
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into log(user_id, login_time, exit_time, update_pwd, edit_user, read_paper, edit_data, algo_runtime, algo_offline, user_info, login_fail)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userId}, #{entity.loginTime}, #{entity.exitTime}, #{entity.updatePwd}, #{entity.editUser}, #{entity.readPaper}, #{entity.editData}, #{entity.algoRuntime}, #{entity.algoOffline}, #{entity.userInfo}, #{entity.loginFail})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into log(user_id, login_time, exit_time, update_pwd, edit_user, read_paper, edit_data, algo_runtime, algo_offline, user_info, login_fail)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.loginTime}, #{entity.exitTime}, #{entity.updatePwd}, #{entity.editUser}, #{entity.readPaper}, #{entity.editData}, #{entity.algoRuntime}, #{entity.algoOffline}, #{entity.userInfo}, #{entity.loginFail})
+        </foreach>
+        on duplicate key update
+        user_id = values(user_id),
+        login_time = values(login_time),
+        exit_time = values(exit_time),
+        update_pwd = values(update_pwd),
+        edit_user = values(edit_user),
+        read_paper = values(read_paper),
+        edit_data = values(edit_data),
+        algo_runtime = values(algo_runtime),
+        algo_offline = values(algo_offline),
+        user_info = values(user_info),
+        login_fail = values(login_fail)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update log
+        <set>
+            <if test="updatePwd != null">
+                update_pwd = update_pwd+1,
+            </if>
+            <if test="editUser != null">
+                edit_user = edit_user+1,
+            </if>
+            <if test="readPaper != null">
+                read_paper = read_paper+1,
+            </if>
+            <if test="editData != null">
+                edit_data = edit_data+1,
+            </if>
+            <if test="algoRuntime != null">
+                algo_runtime = algo_runtime+1,
+            </if>
+            <if test="algoOffline != null">
+                algo_offline = algo_offline+1,
+            </if>
+            <if test="userInfo != null">
+                user_info = user_info+1,
+            </if>
+            <if test="loginFail != null">
+                login_fail = login_fail+1,
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from log where id = #{id}
+    </delete>
+
+</mapper>
+
