@@ -96,6 +96,15 @@ public class UserController {
         return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), isSuccess);
     }
 
+    @PostMapping(value = "/deleteUser")
+    public Resp<Object> getUserInfo(@RequestBody User user) {
+        if (userService.deleteUser(user) != 0) {
+            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user);
+        } else {
+            return new Resp<>(StatusEnum.OPERATION_FAIL.getStatusCode(), StatusEnum.OPERATION_FAIL.getStatusMsg(), null);
+        }
+    }
+
     @GetMapping(value = "/userInfo")
     public Resp<Object> getUserInfo(@RequestParam(name = "userId", required = false) String userId,
                                     @RequestParam(name = "pageNum", required = false) Integer pageNum,
@@ -103,6 +112,9 @@ public class UserController {
         if (pageNum != null && pageSize != null)
             PageHelper.startPage(pageNum, pageSize);
         List<User> user = userService.queryById(userId);
+        if (user.size() == 0) {
+            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), null);
+        }
         if (pageNum != null && pageSize != null) {
             PageInfo<User> userPageInfo = new PageInfo<>(user);
             return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), userPageInfo);
@@ -110,7 +122,10 @@ public class UserController {
             if (user.size() == 1) {
                 return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user.get(0));
             }
-            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), user);
+            PageHelper.startPage(1, user.size());
+            List<User> userList = userService.queryById(userId);
+            PageInfo<User> userPageInfo = new PageInfo<>(userList);
+            return new Resp<>(StatusEnum.OPERATION_SUCCESS.getStatusCode(), StatusEnum.OPERATION_SUCCESS.getStatusMsg(), userPageInfo);
         }
     }
 

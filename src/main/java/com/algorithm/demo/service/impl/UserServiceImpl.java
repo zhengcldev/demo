@@ -106,6 +106,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int deleteUser(User user) {
+        return this.userDao.deleteByUserId(user.getUserId());
+    }
+
+    @Override
     public String resetPassword(User user) {
         //生成随机密码
         String pwd = generatePwd();
@@ -140,14 +145,4 @@ public class UserServiceImpl implements UserService {
         return result != 0;
     }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 是否成功
-     */
-    @Override
-    public boolean deleteById(Integer id) {
-        return this.userDao.deleteById(id) > 0;
-    }
 }

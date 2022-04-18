@@ -30,7 +30,7 @@
         from user
         <where>
             <if test="userId != null">
-                and user_id = #{userId}
+                and user_id like '%' #{userId} '%'
             </if>
         </where>
     </select>
@@ -285,10 +285,10 @@
     </update>
 
     <!--通过主键删除-->
-    <delete id="deleteById">
+    <delete id="deleteByUserId">
         delete
         from user
-        where id = #{id}
+        where user_id = #{userId}
     </delete>
 
 </mapper>

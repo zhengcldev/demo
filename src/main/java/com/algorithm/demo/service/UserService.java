@@ -69,9 +69,16 @@ public interface UserService {
     /**
      * 更新用户锁定状态
      * @param user 用户信息
-     * @return 实力对象
+     * @return 操作个数
      */
     int updateState(User user);
+
+    /**
+     * 删除用户
+     * @param user 用户信息
+     * @return 操作个数
+     */
+    int deleteUser(User user);
 
     /**
      *
@@ -81,13 +88,5 @@ public interface UserService {
      * @return 布尔值
      */
     boolean updatePassword(String userId, String password, String newPassword);
-
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 是否成功
-     */
-    boolean deleteById(Integer id);
 
 }
